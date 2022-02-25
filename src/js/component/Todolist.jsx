@@ -1,20 +1,54 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Todolist.css";
 
-const Todolist = (props) => {
+const Todolist = () => {
 	const [list, setlist] = useState([]);
 	const [tarea, setTarea] = useState("");
 
 	const HandleSubmit = (ev) => {
 		ev.preventDefault();
-		setlist([...list, tarea]);
-		setTarea("");
-		console.log(list);
+		if (tarea != "") {
+			const newlist = [...list, tarea];
+
+			setTarea("");
+			console.log(newlist);
+			fetch(
+				"https://assets.breatheco.de/apis/fake/todos/user/alesanchezr",
+				{
+					method: "PUT",
+					body: JSON.stringify(newlist),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
+				.then((res) => res.json())
+				.then((data) => {
+					console.log(data);
+				});
+		}
 	};
 	const Delete = (item) => {
 		setlist(list.filter((itemcito) => item != itemcito));
 		console.log(index);
 	};
+
+	useEffect(() => {
+		const todolist = fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/alesanchezr",
+			{
+				method: "POST",
+				body: JSON.stringify([]),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		)
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data);
+			});
+	}, []);
 
 	return (
 		<>
